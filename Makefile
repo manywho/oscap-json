@@ -6,5 +6,5 @@ build:
 	go build -ldflags "-X main.version=$(VERSION) -X main.commitHash=$$(git rev-parse --short HEAD)"
 
 release:
-	GOARCH=amd64 GOOS=linux go build -ldflags "-X main.version=$(VERSION) -X main.commitHash=$$(git rev-parse --short HEAD)" -o oscap-json-amd64
-	GOARCH=386 GOOS=linux go build -ldflags "-X main.version=$(VERSION) -X main.commitHash=$$(git rev-parse --short HEAD)" -o oscap-json-386
+	GOARCH=amd64 GOOS=linux go build -ldflags "-X main.version=$(VERSION) -X main.commitHash=$$(git rev-parse --short HEAD)" -o oscap-json-linux-amd64
+	GOARCH=386 GOOS=linux go build -ldflags "-X main.version=$(VERSION) -X main.commitHash=$$(git rev-parse --short HEAD)" -o oscap-json-linux-386
