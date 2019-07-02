@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 
@@ -25,7 +26,22 @@ type Result struct {
 	Result string `json:"result"`
 }
 
+const version = "0.1.0"
+
+var (
+	flagVersion = flag.Bool("version", false, "Display version information")
+)
+
+func init() {
+	flag.Parse()
+}
+
 func main() {
+	if *flagVersion {
+		fmt.Println("oscap-json", version)
+		return
+	}
+
 	o := Parse(os.Stdin)
 
 	enc := json.NewEncoder(os.Stdout)
