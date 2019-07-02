@@ -10,14 +10,16 @@ import (
 	"strings"
 )
 
-type output struct {
+// Output is the output format for the parsed data
+type Output struct {
 	Status   bool     `json:"status"`
 	Checks   int      `json:"checks"`
-	Failed   []result `json:"failed"`
+	Failed   []Result `json:"failed"`
 	Warnings []string `json:"warnings"`
 }
 
-type result struct {
+// Result holds the information about an individual check
+type Result struct {
 	Title  string `json:"title"`
 	Rule   string `json:"rule"`
 	Result string `json:"result"`
@@ -32,15 +34,16 @@ func main() {
 	}
 }
 
-func Parse(in io.Reader) output {
+// Parse reads from in and converts it into an output object
+func Parse(in io.Reader) Output {
 	scanner := bufio.NewScanner(bufio.NewReader(in))
 
-	processedOutput := output{
+	processedOutput := Output{
 		Status: true,
-		Failed: []result{},
+		Failed: []Result{},
 	}
 
-	res := result{}
+	res := Result{}
 
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -67,7 +70,7 @@ func Parse(in io.Reader) output {
 				processedOutput.Failed = append(processedOutput.Failed, res)
 			}
 
-			res = result{}
+			res = Result{}
 		}
 	}
 
