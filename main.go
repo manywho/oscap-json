@@ -41,7 +41,7 @@ func init() {
 
 func main() {
 	if *flagVersion {
-		fmt.Println("oscap-json", version)
+		fmt.Printf("oscap-json %s+%s\n", version, commitHash)
 		return
 	}
 
