@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"log"
 
 	"os"
 	"strings"
@@ -26,10 +27,12 @@ type Result struct {
 	Result string `json:"result"`
 }
 
-const version = "0.1.0"
-
 var (
-	flagVersion = flag.Bool("version", false, "Display version information")
+	flagFile    = flag.String("file", "", "Input file to read. If this is not set, stdin will be used")
+	flagPretty  = flag.Bool("pretty", false, "Pretty print the output")
+	flagVersion = flag.Bool("version", false, "Print version information")
+	version     = "notset"
+	commitHash  = "notset"
 )
 
 func init() {
@@ -42,9 +45,25 @@ func main() {
 		return
 	}
 
-	o := Parse(os.Stdin)
+	var input io.Reader
+
+	if *flagFile != "" {
+		var err error
+		input, err = os.Open(*flagFile)
+		if err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		input = os.Stdin
+	}
+
+	o := Parse(input)
 
 	enc := json.NewEncoder(os.Stdout)
+	if *flagPretty {
+		enc.SetIndent("", "  ")
+	}
+
 	if err := enc.Encode(o); err != nil {
 		fmt.Println(err)
 	}
